@@ -24,10 +24,10 @@
        	
     </PreferenceCategory>
     
-    <PreferenceCategory android:title="Push Data (Uses minimum network as possible)">
+    <PreferenceCategory android:title="Push Data">
         <CheckBoxPreference 
             android:title="Status"
-            android:key="ushNotifications" 
+            android:key="pushNotifications" 
             android:enabled="true" 
             android:selectable="true"/>
     </PreferenceCategory>

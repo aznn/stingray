@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="14dp"
         android:layout_marginTop="14dp"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/nothumb" />
 
     <TextView
         android:id="@+id/eventDescription"
