@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <PreferenceCategory android:title="Personal Details ( Required for RSVP )" android:key="c2dm" >
+        
+        <EditTextPreference 
+            android:title="Name" 
+            android:key="SUMname"
+            android:inputType="textPersonName" 
+            android:dialogMessage="Your Full Name"
+            android:dialogTitle="Name"/>
+       	<EditTextPreference 
+       	    android:title="Mobile" 
+       	    android:key="SUMmobile" 
+       	    android:inputType="phone"
+       	    android:dialogMessage="Mobile Number (without +91)" 
+       	    android:dialogTitle="Mobile"/>
+       	<EditTextPreference 
+       	    android:title="Email" 
+       	    android:inputType="textEmailAddress"
+       	    android:key="SUMemail" 
+       	    android:dialogMessage="Email ID" 
+       	    android:dialogTitle="Email"/>
+       	
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="Push Data (Uses minimum network as possible)">
+        <CheckBoxPreference 
+            android:title="Status"
+            android:key="ushNotifications" 
+            android:enabled="true" 
+            android:selectable="true"/>
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="Others">
+		<PreferenceScreen
+                android:key="share"
+                android:title="Share"
+                android:summary="Share this app with your friends"
+                android:selectable="true">
+        </PreferenceScreen>
+        
+		<!-- 
+		<PreferenceScreen
+                android:key="credits"
+                android:title="Credits"
+                android:summary="About the developers">
+        </PreferenceScreen>
+    	-->
+    	
+    	<PreferenceScreen
+                android:key="screen_preference"
+                android:title="App Version"
+                android:summary="@string/app_version"
+                android:selectable="false">
+        </PreferenceScreen>
+    </PreferenceCategory>
+    
+</PreferenceScreen>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="ga_api_key">UA-32148823-1</string>
+    <bool name="ga_debug">false</bool>
+    <bool name="ga_auto_activity_tracking">true</bool>
+    <item format="integer" name="ga_dispatchPeriod" type="integer">180</item>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xdev.obliquity"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="8" />
+    
+   	<uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+   	<uses-permission android:name="android.permission.VIBRATE" />
+   	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+   	
+   	<!-- C2DM Permissions -->
+	<permission android:name="com.xdev.obliquity.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+   	<uses-permission android:name="com.xdev.obliquity.permission.C2D_MESSAGE" />
+   	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+   	
+    <application
+        android:icon="@drawable/appicon"
+        android:label="@string/app_name"
+        android:name=".Obliquity"
+        android:theme="@style/Theme.HoloEverywhereDark" >
+        
+        <activity
+            android:name=".ActivityMain"
+            android:label="@string/app_name"
+             android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".ActivityFeed" />
+        <activity android:name=".ActivityEvent" />
+        <activity android:name=".ActivityAboutXdev" />
+        <activity android:name=".ActivityAboutObliquity" />
+        <activity android:name=".ActivityImageViewer" />
+        <activity android:name=".Preferences" />
+        
+        <service android:name=".C2DMReceiver" />
+        
+        <!-- c2dm Broadcast Reciever -->
+        <receiver android:name="com.google.android.c2dm.C2DMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+          <intent-filter>
+              <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+              <category android:name="com.xdev.obliquity" />
+          </intent-filter>
+          <intent-filter>
+              <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+              <category android:name="com.xdev.obliquity" />
+          </intent-filter>
+          <intent-filter>
+              <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+              <category android:name="com.xdev.obliquity" />
+          </intent-filter>
+      </receiver>
+        
+    </application>
+
+</manifest>
