@@ -20,21 +20,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fedorvlasov.lazylist.ImageLoader;
 import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
-import com.markupartist.android.widget.PullToRefreshExpandableListView;
-import com.markupartist.android.widget.PullToRefreshExpandableListView.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 import com.xdev.obliquity.JsonResponse.Events;
 
 public class ActivityEvent extends TrackedActivity {
@@ -50,9 +49,12 @@ public class ActivityEvent extends TrackedActivity {
 	Vibrator mVibrator;
 	Util mUtil;
 	EventListAdapter adapter; // Adapter
+	
 	PullToRefreshExpandableListView list;
+	ExpandableListView mActualList;
 	
 	boolean listInitialized = false;
+	boolean refreshing = false;
 	
 	// LIFECYCLE FUNCTIONS
 	
@@ -118,17 +120,24 @@ public class ActivityEvent extends TrackedActivity {
 	// Handles refresh calls
 	public void refresh() {
 		mVibrator.vibrate(Config.REFRESH_VIBRATE_DURATION);
+		
 		// InternetAccess will be handled by application & DataHandler. Handled Here to avoid wasteful function calls
-		if(mUtil.isOnline())
+		if(mUtil.isOnline()) {
 			refreshData();
-		else
-			noInternetAccess(2);
+		} else {
+			list.onRefreshComplete();
+			noInternetAccess(2); // TODO : What is this about :s
+		}
 	}
 	
 	
 	// Called by Obliquity(APP) on failed download
 	private void downloadFailed() {
 		makeToast("We encountered an error while trying to refresh.", Toast.LENGTH_SHORT);
+		
+		refreshing = false;
+		if(list != null)
+			list.onRefreshComplete();
 		
 		if(askLoadCache())
 			dlHandler.loadCache();
@@ -168,6 +177,10 @@ public class ActivityEvent extends TrackedActivity {
 			case 99:
 				makeToast("Sorry, We are facing some issues right now. Please try again later. ", Toast.LENGTH_LONG);
 		}
+		
+		refreshing = false;
+		if(list != null)
+			list.onRefreshComplete();
 	}
 	
 	private void makeToast(String text, int duration) {
@@ -186,24 +199,29 @@ public class ActivityEvent extends TrackedActivity {
 		
 		if(listInitialized) { // Returning from refresh()
 			adapter.changeDataSet(values);
-			makeToast("These events are minty fresh now!", Toast.LENGTH_SHORT);
-			Date d = new Date();
-			CharSequence s  = DateFormat.format("hh:mm a", d.getTime());
-			list.onRefreshComplete("Last Updated : " + s);
-			list.onRefreshComplete();
+			if(refreshing) {
+				makeToast("These events are minty fresh now!", Toast.LENGTH_SHORT);
+				Date d = new Date();
+				CharSequence s  = DateFormat.format("hh:mm a", d.getTime());
+				list.onRefreshComplete();
+				list.setLastUpdatedLabel("Last Updated : " + s);
+				refreshing = false;
+			}
 		} else {
 			adapter = new EventListAdapter(mContext, values, appState.getServerQueue());
 			list = (PullToRefreshExpandableListView)findViewById(R.id.expandableList);
+			mActualList = (ExpandableListView) list.getRefreshableView();
 			
 			list.setOnRefreshListener(new OnRefreshListener(){
 				@Override
 				public void onRefresh() {
+					refreshing = true;
 					refresh();
 					
 				}
 			});
 			
-			list.setAdapter(adapter);
+			mActualList.setAdapter(adapter);
 			adapter.init();
 			listInitialized = true;
 		}
@@ -250,34 +268,34 @@ public class ActivityEvent extends TrackedActivity {
     	
     	// Called when Adapter is bound to listview
     	public void init() {
-    		list.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-    			@Override
-    			public boolean onItemLongClick(AdapterView<?> parent, View v, int pos, long id) {
-    				tracker.trackEvent("Events", "LongClick", "Event ShareWith", 1);
-    				
-    				int groupPosition = ExpandableListView.getPackedPositionGroup(id);
-    				Events event = values.get(groupPosition);
-    				
-    				StringBuilder sb = new StringBuilder();
-    				sb.append("Obliquity's Event on (");
-    				sb.append(event.date);
-    				sb.append(")\n");
-    				sb.append("Event Title : ");
-    				sb.append(event.title);
-    				sb.append("\n");
-    				sb.append("Event Description : ");
-    				sb.append(event.description);
-    				sb.append("\n");
-    		          
-    				Intent intent = new Intent(Intent.ACTION_SEND);
-    			    intent.setType("text/plain");
-    			    intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
-    			    startActivity(Intent.createChooser(intent, "Share with"));
-    				
-    				return true;
-    			}
-    		});
+//    		list.setOnItemLongClickListener(new OnItemLongClickListener() {
+//
+//    			@Override
+//    			public boolean onItemLongClick(AdapterView<?> parent, View v, int pos, long id) {
+//    				tracker.trackEvent("Events", "LongClick", "Event ShareWith", 1);
+//    				
+//    				int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+//    				Events event = values.get(groupPosition);
+//    				
+//    				StringBuilder sb = new StringBuilder();
+//    				sb.append("Obliquity's Event on (");
+//    				sb.append(event.date);
+//    				sb.append(")\n");
+//    				sb.append("Event Title : ");
+//    				sb.append(event.title);
+//    				sb.append("\n");
+//    				sb.append("Event Description : ");
+//    				sb.append(event.description);
+//    				sb.append("\n");
+//    		          
+//    				Intent intent = new Intent(Intent.ACTION_SEND);
+//    			    intent.setType("text/plain");
+//    			    intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+//    			    startActivity(Intent.createChooser(intent, "Share with"));
+//    				
+//    				return true;
+//    			}
+//    		});
     	}
     	
     	// Gets RSVP History

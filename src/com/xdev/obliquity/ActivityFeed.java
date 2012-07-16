@@ -18,13 +18,14 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
-import com.markupartist.android.widget.PullToRefreshListView;
-import com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.xdev.obliquity.JsonResponse.Feeds;
 
 public class ActivityFeed extends TrackedActivity {
@@ -40,6 +41,7 @@ public class ActivityFeed extends TrackedActivity {
 	Util mUtil;
 	FeedListAdapter adapter; // Adapter
 	PullToRefreshListView list;
+	ListView mActualList; // Pull to refresh's PullToRefreshListView is not the actual list. This is. 
 	Vibrator mVibrator;
 	
 	boolean listInitialized = false;
@@ -70,8 +72,9 @@ public class ActivityFeed extends TrackedActivity {
         			case 0:
         				downloadFailed();
         				break;
-        			case 2:
-        				noInternetAccess();
+        			case 2: // isOnline returns false
+        			case 99: // Connected yet server not responding
+        				noInternetAccess(message.what);
         				break;
         			case 11: 
         				cacheSuccessful();
@@ -111,11 +114,11 @@ public class ActivityFeed extends TrackedActivity {
 		
 		// InternetAccess will be handled by application & DataHandler. Handled Here to avoid wasteful function calls
 		if(mUtil.isOnline()) {
-			list.prepareForRefresh();
-			refreshing = true;
 			refreshData();
-		} else
-			noInternetAccess();
+		} else {
+			list.onRefreshComplete();
+			noInternetAccess(2);
+		}
 	}
 	
 	// Called by Obliquity(APP) on failed download
@@ -155,10 +158,16 @@ public class ActivityFeed extends TrackedActivity {
 	}
 	
 	// No Internet Access. Load Cache if possible. Else call displayEmpty()
-	public void noInternetAccess() {
+	public void noInternetAccess(int what) {
 		if(DEBUG) Log.e(TAG, "No Internet Access, Trying to Load from Cache");
 
-		makeToast("Cannot refresh without an active internet connection.", Toast.LENGTH_SHORT);
+		switch(what) {
+			case 2:
+				makeToast("Cannot refresh without an active internet connection.", Toast.LENGTH_SHORT);
+				break;
+			case 99:
+				makeToast("Sorry, We are facing some issues right now. Please try again later. ", Toast.LENGTH_LONG);
+		}
 		
 		refreshing = false;
 		if(list != null)
@@ -180,25 +189,28 @@ public class ActivityFeed extends TrackedActivity {
 		if(listInitialized) { // Returning from a refresh() call
 			adapter.changeDataSet(values); 
 			if(refreshing) {
-				makeToast("Refresh Completed", Toast.LENGTH_SHORT);
+				makeToast("Refresh completed", Toast.LENGTH_SHORT);
 				Date d = new Date();
 				CharSequence s  = DateFormat.format("hh:mm a", d.getTime());
-				list.onRefreshComplete("Last Updated : " + s);
+				list.onRefreshComplete();
+				list.setLastUpdatedLabel("Last Updated : " + s);
 				refreshing = false;
 			}
 		} else {
 			adapter = new FeedListAdapter(mContext, values);
 			list = (PullToRefreshListView)findViewById(R.id.list);
+			mActualList = (ListView) list.getRefreshableView();
 			
 			list.setOnRefreshListener(new OnRefreshListener(){
 				@Override
 				public void onRefresh() {
+					refreshing = true;
 					refresh();
 					
 				}
 			});
 			
-			list.setAdapter(adapter);
+			mActualList.setAdapter(adapter);
 			adapter.init();
 			listInitialized = true;
 		}
@@ -230,7 +242,7 @@ public class ActivityFeed extends TrackedActivity {
     	
     	// Called when Adapter is bound to listview
     	public void init() {
-    		list.setOnItemLongClickListener(new OnItemLongClickListener() {
+    		mActualList.setOnItemLongClickListener(new OnItemLongClickListener() {
 
     			@Override
     			public boolean onItemLongClick(AdapterView<?> parent, View v, int pos, long id) {
