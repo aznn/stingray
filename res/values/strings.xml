@@ -6,13 +6,6 @@
     <string name="app_name">Obliquity</string>
     <string name="app_version">1.2</string>
 	<string name="advert">XDev | Rices Inc. | Sauza | Millers | Teachers</string>   
-		 
-    <string name="pull_to_refresh_pull_label">Pull to refresh...</string>
-    <string name="pull_to_refresh_release_label">Release to refresh...</string>
-    <string name="pull_to_refresh_refreshing_label">Loading...</string>
-    <string name="pull_to_refresh_tap_label">Tap to refresh...</string>
-
-    <string name="actionbar_activity_not_found">Failed to open intent...</string>
 
     <string name="events">Events</string>
 
