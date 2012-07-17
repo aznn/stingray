@@ -28,13 +28,20 @@ public class ImageLoader {
     FileCache fileCache;
     private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService; 
+    int stub_id;
     
-    public ImageLoader(Context context){
+    // pass 0 for default stub
+    public ImageLoader(Context context, int stubId){
         fileCache=new FileCache(context);
         executorService=Executors.newFixedThreadPool(5);
+        
+        if(stubId != 0) 
+        	stub_id = stubId;
+        else
+        	stub_id = R.drawable.stub;
+        
     }
     
-    final int stub_id=R.drawable.stub;
     public void DisplayImage(String url, ImageView imageView)
     {
         imageViews.put(imageView, url);
@@ -54,12 +61,12 @@ public class ImageLoader {
         executorService.submit(new PhotosLoader(p));
     }
     
-    private Bitmap getBitmap(String url) 
+    private Bitmap getBitmap(String url, int REQUIRED_SIZE) 
     {
         File f=fileCache.getFile(url);
         
         //from SD cache
-        Bitmap b = decodeFile(f);
+        Bitmap b = decodeFile(f, REQUIRED_SIZE);
         if(b!=null)
             return b;
         
@@ -75,7 +82,7 @@ public class ImageLoader {
             OutputStream os = new FileOutputStream(f);
             Utils.CopyStream(is, os);
             os.close();
-            bitmap = decodeFile(f);
+            bitmap = decodeFile(f, REQUIRED_SIZE);
             return bitmap;
         } catch (Exception ex){
            ex.printStackTrace();
@@ -84,7 +91,7 @@ public class ImageLoader {
     }
 
     //decodes image and scales it to reduce memory consumption
-    private Bitmap decodeFile(File f){
+    private Bitmap decodeFile(File f, int REQUIRED_SIZE){
         try {
             //decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
@@ -92,7 +99,6 @@ public class ImageLoader {
             BitmapFactory.decodeStream(new FileInputStream(f),null,o);
             
             //Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE=70;
             int width_tmp=o.outWidth, height_tmp=o.outHeight;
             int scale=1;
             while(true){
@@ -116,14 +122,22 @@ public class ImageLoader {
     {
         public String url;
         public ImageView imageView;
+        public int REQUIRED_SIZE;
+        
         public PhotoToLoad(String u, ImageView i){
             url=u; 
             imageView=i;
+            
+            final int mH = i.getHeight();
+            final int mW = i.getWidth();
+            this.REQUIRED_SIZE = (mH > mW ? mH : mW);
+            // Let REQUIRED_SIZE be the greater of height and width of the image view provided
         }
     }
     
     class PhotosLoader implements Runnable {
         PhotoToLoad photoToLoad;
+        
         PhotosLoader(PhotoToLoad photoToLoad){
             this.photoToLoad=photoToLoad;
         }
@@ -132,7 +146,7 @@ public class ImageLoader {
         public void run() {
             if(imageViewReused(photoToLoad))
                 return;
-            Bitmap bmp=getBitmap(photoToLoad.url);
+            Bitmap bmp=getBitmap(photoToLoad.url, photoToLoad.REQUIRED_SIZE);
             memoryCache.put(photoToLoad.url, bmp);
             if(imageViewReused(photoToLoad))
                 return;
@@ -168,7 +182,7 @@ public class ImageLoader {
 
     public void clearCache() {
         memoryCache.clear();
-        fileCache.clear();
+        fileCache.clearCache();
     }
 
 }

@@ -20,12 +20,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -260,7 +261,8 @@ public class ActivityEvent extends TrackedActivity {
     		this.values = values;
     		this.mSQueue = mSQueue;
     		
-    		imgLoader = new ImageLoader(context);
+    		// ImageLoader(context, image_loading_stub_R_Id, REQUIRED_SIZE)
+    		imgLoader = new ImageLoader(context, 0);
     		tracker = EasyTracker.getTracker();
     		
     		setRSVPHistory();
@@ -268,34 +270,34 @@ public class ActivityEvent extends TrackedActivity {
     	
     	// Called when Adapter is bound to listview
     	public void init() {
-//    		list.setOnItemLongClickListener(new OnItemLongClickListener() {
-//
-//    			@Override
-//    			public boolean onItemLongClick(AdapterView<?> parent, View v, int pos, long id) {
-//    				tracker.trackEvent("Events", "LongClick", "Event ShareWith", 1);
-//    				
-//    				int groupPosition = ExpandableListView.getPackedPositionGroup(id);
-//    				Events event = values.get(groupPosition);
-//    				
-//    				StringBuilder sb = new StringBuilder();
-//    				sb.append("Obliquity's Event on (");
-//    				sb.append(event.date);
-//    				sb.append(")\n");
-//    				sb.append("Event Title : ");
-//    				sb.append(event.title);
-//    				sb.append("\n");
-//    				sb.append("Event Description : ");
-//    				sb.append(event.description);
-//    				sb.append("\n");
-//    		          
-//    				Intent intent = new Intent(Intent.ACTION_SEND);
-//    			    intent.setType("text/plain");
-//    			    intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
-//    			    startActivity(Intent.createChooser(intent, "Share with"));
-//    				
-//    				return true;
-//    			}
-//    		});
+    		mActualList.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+    			@Override
+    			public boolean onItemLongClick(AdapterView<?> parent, View v, int pos, long id) {
+    				tracker.trackEvent("Events", "LongClick", "Event ShareWith", 1);
+    				
+    				int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+    				Events event = values.get(groupPosition);
+    				
+    				StringBuilder sb = new StringBuilder();
+    				sb.append("Obliquity's Event on (");
+    				sb.append(event.date);
+    				sb.append(")\n");
+    				sb.append("Event Title : ");
+    				sb.append(event.title);
+    				sb.append("\n");
+    				sb.append("Event Description : ");
+    				sb.append(event.description);
+    				sb.append("\n");
+    		          
+    				Intent intent = new Intent(Intent.ACTION_SEND);
+    			    intent.setType("text/plain");
+    			    intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+    			    startActivity(Intent.createChooser(intent, "Share with"));
+    				
+    				return true;
+    			}
+    		});
     	}
     	
     	// Gets RSVP History
