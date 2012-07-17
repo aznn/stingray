@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.fedorvlasov.lazylist.FileCache;
 import com.fedorvlasov.lazylist.ImageLoader;
 
 public class Obliquity extends Application {
@@ -58,7 +59,7 @@ public class Obliquity extends Application {
 		mHandler = new Handler() {
 			@Override
 			public void handleMessage(Message message) {
-				Log.i(TAG, "Message Recieved. What : " + message.what);
+				if(DEBUG) Log.i(TAG, "Message Recieved. What : " + message.what);
 				
 				switch(message.what) {
 					case 0: // Download Failure
@@ -86,7 +87,7 @@ public class Obliquity extends Application {
 	
 	// Cache Failed
 	private void cacheFailed(int what) { // What - 10
-		Log.d(TAG, "dl failed" + dlFailed);
+		if(DEBUG) Log.d(TAG, "dl failed" + dlFailed);
 		
 		if(!dlFailed)
 			mDownloadHandler.refresh();
@@ -131,11 +132,11 @@ public class Obliquity extends Application {
 	// Sends Messages to Subscribers
 	private void sendSubMessage(int what) {
 		if(subscribed) {
-			Log.i(TAG, "Messaging Subscriber what : " + what);
+			if(DEBUG) Log.i(TAG, "Messaging Subscriber what : " + what);
 			sHandler.sendEmptyMessage(what);
 		} else {
 			cached_what = what;
-			Log.i(TAG, "Caching Subscriber what : " + what);
+			if(DEBUG) Log.i(TAG, "Caching Subscriber what : " + what);
 		}
 	}
 	
@@ -153,7 +154,7 @@ public class Obliquity extends Application {
 	// C2DM - True : Loads from Cache, False : Downloads Data
 	// immediateAction : Starts download/Cache immidiately.
 	public DownloadHandler getDownloadHandler(Handler handler, boolean C2DMStatus, boolean immediateAction) {
-		Log.i(TAG, "Subscriber recieved c2dm : " + C2DMStatus + "| immediate : " + immediateAction);
+		if(DEBUG) Log.i(TAG, "Subscriber recieved c2dm : " + C2DMStatus + "| immediate : " + immediateAction);
 		sHandler = handler;
 		
 		initDownloadHandler(C2DMStatus, immediateAction, false);
@@ -164,7 +165,7 @@ public class Obliquity extends Application {
 	
 	// Called From the service when it recieves a C2DM Message saying new Data is on the server
 	public void forceRefresh(Handler handler) {
-		Log.i(TAG, "Initiating a Force Refresh");
+		if(DEBUG) Log.i(TAG, "Initiating a Force Refresh");
 		sHandler = handler;
 		
 		initDownloadHandler(false, false, true);
@@ -232,7 +233,7 @@ public class Obliquity extends Application {
 	
 	// unsubscribe
 	public void unsubscribe() {
-		Log.i(TAG, "Unsubscribed");
+		if(DEBUG) Log.i(TAG, "Unsubscribed");
 		subscribed = false;
 		sHandler = null;
 	}
@@ -272,11 +273,25 @@ public class Obliquity extends Application {
 	
 	// Saves the directory size to memory, (Directory used to cache Downloaded Images)
 	// Must be called on onPause() of any activity using ImageLoader for accuracy
-	public void commitDirectorySize() {
+	
+	private FileCache mFileCache;
+	private void setupFileCache() {
 		if(mImgLoader == null)
 			mImgLoader = new ImageLoader(this);
 		
-		mImgLoader.getFileCache().commmitDirSize();
+		if(mFileCache == null)
+			mFileCache = mImgLoader.getFileCache();
 	}
+	
+	public void commitDirectorySize() {
+		setupFileCache();
+		mFileCache.commmitDirSize();
+	}
+	
+	public void clearFileCache() {
+		setupFileCache();
+		mFileCache.clearCache();
+	}
+	
 	// END PUBLIC METHODS
 }

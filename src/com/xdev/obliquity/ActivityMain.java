@@ -165,6 +165,7 @@ public class ActivityMain extends TrackedActivity implements OnClickListener{
 			
 			case R.id.btn_aboutObliquity:
 				intent = new Intent(mContext, ActivityAboutObliquity.class);
+				appState.clearFileCache();
 				break;
 			
 		}

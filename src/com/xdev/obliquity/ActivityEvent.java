@@ -112,7 +112,7 @@ public class ActivityEvent extends TrackedActivity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		Log.d(TAG, "Event unsubscribing");
+		if(DEBUG) Log.d(TAG, "Event unsubscribing");
 		appState.unsubscribe();
 		appState.commitDirectorySize(); // Saves directory size of ImageLoader class.
 	}
@@ -257,7 +257,7 @@ public class ActivityEvent extends TrackedActivity {
     	
     	// Constructor
     	public EventListAdapter(Context context, List<Events> values, ServerQueue mSQueue) {
-    		Log.d(TAG, "Adapter Constructor");
+    		if(DEBUG) Log.d(TAG, "Adapter Constructor");
     		this.mContext = context;
     		this.values = values;
     		this.mSQueue = mSQueue;
@@ -325,7 +325,7 @@ public class ActivityEvent extends TrackedActivity {
     	int mEventId;
 		@Override
 		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-			Log.i(TAG, "GroupPosition called : " + groupPosition);
+			if(DEBUG) Log.i(TAG, "GroupPosition called : " + groupPosition);
 			View rowView = convertView;
 			mEventId = values.get(groupPosition).eventId;
     		pViewHolder holder;
@@ -417,10 +417,10 @@ public class ActivityEvent extends TrackedActivity {
 		// Checks if number is in RSVP list
 		public boolean contains(int event) {
 			if(rsvpHistory.contains(Integer.toString(event))) {
-				Log.i(TAG, "rsvpHistory true event : " + event);
+				if(DEBUG) Log.i(TAG, "rsvpHistory true event : " + event);
 				return true;
 			} else {
-				Log.i(TAG, "rsvpHistory false event : " + event);
+				if(DEBUG) Log.i(TAG, "rsvpHistory false event : " + event);
  				return false;
 			}
 		}
