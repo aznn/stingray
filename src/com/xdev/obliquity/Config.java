@@ -16,6 +16,9 @@ public class Config {
 	public static final String TAG_UTIL = "--util";
 	public static final String TAG_PREFERENCE = "--preference";
 	public static final String TAG_SERVER_QUEUE = "--ServerQueue";
+	public static final String TAG_IMGLOAD_LOADER = "--IMGLOAD--ImageLoader";
+	public static final String TAG_IMGLOAD_FILECH = "--IMGLOAD--FileChche";
+	public static final String TAG_IMGLOAD_MEMCACHE = "--IMGLOAD--MemCache";
 	//GOGLE
 	public static final String TAG_GOOGLE_BROADCAST_RECIEVER = "--broadcastRCVR";
 	public static final String TAG_GOOGLE_C2DMESSENGER = "--google(c2dmMessenger)";
@@ -32,6 +35,10 @@ public class Config {
 	public static final boolean DEBUG_UTIL = true;						//Util
 	public static final boolean DEBUG_PREFERENCE = true;				//Preference
 	public static final boolean DEBUG_SERVER_QUEUE = true;				//ServerQueue
+	//IMAGELOADER
+	public static final boolean DEBUG_IMGLOAD_LOADER = true;			//ImageLoader
+	public static final boolean DEBUG_IMGLOAD_FILECH = true;					//FileCache
+	public static final boolean DEBUG_IMGLOAD_MEMCACHE = true;					//MemoryCache 
 	//GOOGLE
 	public static final boolean DEBUG_GOOGLE_C2DMESSENGER = true;		//C2DMessaging
 	public static final boolean DEBUG_GOOGLE_C2DMBASERECEIVER = true;	//C2DMBaseReceiver

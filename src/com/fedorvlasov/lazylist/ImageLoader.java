@@ -18,12 +18,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.ImageView;
 
+import com.xdev.obliquity.Config;
 import com.xdev.obliquity.R;
 
 public class ImageLoader {
     
+	private final static String TAG = Config.TAG_IMGLOAD_LOADER;
+	private final static boolean DEBUG = Config.DEBUG_IMGLOAD_LOADER;
+	
     MemoryCache memoryCache=new MemoryCache();
     FileCache fileCache;
     private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
@@ -44,6 +49,8 @@ public class ImageLoader {
     
     public void DisplayImage(String url, ImageView imageView)
     {
+    	if(DEBUG) Log.i(TAG, "DisplayImage : " + url);
+    	
         imageViews.put(imageView, url);
         Bitmap bitmap=memoryCache.get(url);
         if(bitmap!=null)
@@ -67,10 +74,13 @@ public class ImageLoader {
         
         //from SD cache
         Bitmap b = decodeFile(f, REQUIRED_SIZE);
-        if(b!=null)
+        if(b!=null) {
+        	if(DEBUG) Log.i(TAG, "CacheSuccessful Img : " + url);
             return b;
+        }
         
         //from web
+        if(DEBUG) Log.i(TAG, "LoadFromWeb Img : " + url);
         try {
             Bitmap bitmap=null;
             URL imageUrl = new URL(url);
@@ -86,6 +96,7 @@ public class ImageLoader {
             return bitmap;
         } catch (Exception ex){
            ex.printStackTrace();
+           if(DEBUG) Log.e(TAG, "DownloadImage Exception Img : " + url);
            return null;
         }
     }
@@ -132,6 +143,7 @@ public class ImageLoader {
             final int mW = i.getWidth();
             this.REQUIRED_SIZE = (mH > mW ? mH : mW);
             // Let REQUIRED_SIZE be the greater of height and width of the image view provided
+            if(DEBUG) Log.i(TAG, "REQUIRED_SIZE = " + REQUIRED_SIZE +"| Img : " + url);
         }
     }
     

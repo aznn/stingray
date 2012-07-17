@@ -4,9 +4,15 @@ import java.io.File;
 import java.util.Stack;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.xdev.obliquity.Config;
 
 public class FileCache {
     
+	private static final String TAG = Config.TAG_IMGLOAD_FILECH;
+    private static final boolean DEBUG = Config.DEBUG_IMGLOAD_FILECH;
+	
     private File cacheDir;
     private long mDirSize;
     
@@ -20,6 +26,8 @@ public class FileCache {
             cacheDir.mkdirs();
         
         mDirSize = dirSize();
+        
+        if(DEBUG) Log.d(TAG, "FileCache mDirSize : " + mDirSize);
     }
     
     public File getFile(String url){
