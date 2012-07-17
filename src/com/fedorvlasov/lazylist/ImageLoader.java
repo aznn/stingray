@@ -47,7 +47,12 @@ public class ImageLoader {
         
     }
     
-    public void DisplayImage(String url, ImageView imageView)
+    /*
+     * @Param : ReqSize : Make sure the largest requiredSize of the URL is used. Event if two calls to DisplayImage
+     *                    is made with different reqSize, First calls reqSize will only be considered. Since second time 
+     *                    the image would be loaded from cache
+     */
+    public void DisplayImage(String url, ImageView imageView, int reqSize)
     {
     	if(DEBUG) Log.i(TAG, "DisplayImage : " + url);
     	
@@ -57,14 +62,14 @@ public class ImageLoader {
             imageView.setImageBitmap(bitmap);
         else
         {
-            queuePhoto(url, imageView);
+            queuePhoto(url, imageView, reqSize);
             imageView.setImageResource(stub_id);
         }
     }
         
-    private void queuePhoto(String url, ImageView imageView)
+    private void queuePhoto(String url, ImageView imageView, int reqSize)
     {
-        PhotoToLoad p=new PhotoToLoad(url, imageView);
+        PhotoToLoad p=new PhotoToLoad(url, imageView, reqSize);
         executorService.submit(new PhotosLoader(p));
     }
     
@@ -135,13 +140,11 @@ public class ImageLoader {
         public ImageView imageView;
         public int REQUIRED_SIZE;
         
-        public PhotoToLoad(String u, ImageView i){
+        public PhotoToLoad(String u, ImageView i, int reqSize){
             url=u; 
             imageView=i;
             
-            final int mH = i.getHeight();
-            final int mW = i.getWidth();
-            this.REQUIRED_SIZE = (mH > mW ? mH : mW);
+            REQUIRED_SIZE = reqSize;
             // Let REQUIRED_SIZE be the greater of height and width of the image view provided
             if(DEBUG) Log.i(TAG, "REQUIRED_SIZE = " + REQUIRED_SIZE +"| Img : " + url);
         }

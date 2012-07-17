@@ -356,7 +356,8 @@ public class ActivityEvent extends TrackedActivity {
     		
     		if(values.get(groupPosition).hasImage == 1) {
     			if(DEBUG) Log.d(TAG, "HasImage for : " + groupPosition);
-    			imgLoader.DisplayImage(thumbURL + values.get(groupPosition).eventId + ".jpg", holder.thumb);
+    			//DisplayImage(URL, ImageView, RequiredSize)
+    			imgLoader.DisplayImage(thumbURL + values.get(groupPosition).eventId + ".jpg", holder.thumb, 100);
     		} else {
     			// TODO : If noticed a lag, try with setting a tag with a boolean check to avoid reassigning everytime. 
     			holder.thumb.setImageResource(R.drawable.nothumb);
@@ -402,7 +403,7 @@ public class ActivityEvent extends TrackedActivity {
     		}
     		
     		if(values.get(groupPosition).hasImage == 1) {
-    			imgLoader.DisplayImage(imageURL + event + ".jpg", holder.eventImage);
+    			imgLoader.DisplayImage(imageURL + event + ".jpg", holder.eventImage, 100);
     		} else {
     			holder.eventImage.setImageResource(R.drawable.nothumb); // TODO : Set it correctly
     		}
