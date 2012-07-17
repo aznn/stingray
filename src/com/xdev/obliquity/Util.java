@@ -87,6 +87,11 @@ public class Util {
 			mainEditor.commit();
 		}
 		
+		public void addLong(String key, long val) {
+			mainEditor.putLong(key, val);
+			mainEditor.commit();
+		}
+		
 		public void removeKey(String key) {
 			mainEditor.remove(key);
 			mainEditor.commit();
@@ -102,6 +107,10 @@ public class Util {
 		
 		public int getInt(String key, int defValue) {
 			return mainPrefs.getInt(key, defValue);
+		}
+		
+		public long getLong(String key, long defValue) {
+			return mainPrefs.getLong(key, defValue);
 		}
 		
 		// -------------------------------------------------------------

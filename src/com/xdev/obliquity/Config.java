@@ -27,11 +27,11 @@ public class Config {
 	// -------------------------------------------------------------------------------------------------------------
 	// --==DEBUG MODE==---------------------------------------------------------------------------------------------
 	public static final boolean DEBUG_C2DM = true;						//C2DMReceiver		
-	public static final boolean DEBUG_DOWNLOAD_HANDLER = true;			//DownloadHandler
-	public static final boolean DEBUG_OBLIQUITY_APP = true;				//Obliquity
+	public static final boolean DEBUG_DOWNLOAD_HANDLER = false;			//DownloadHandler
+	public static final boolean DEBUG_OBLIQUITY_APP = false;				//Obliquity
 	public static final boolean DEBUG_HOME_SCREEN = true; 				//ActivityMain
-	public static final boolean DEBUG_FEED = true;						//ActivityFeed
-	public static final boolean DEBUG_EVENT = true;						//Feed
+	public static final boolean DEBUG_FEED = false;						//ActivityFeed
+	public static final boolean DEBUG_EVENT = false;						//Feed
 	public static final boolean DEBUG_UTIL = true;						//Util
 	public static final boolean DEBUG_PREFERENCE = true;				//Preference
 	public static final boolean DEBUG_SERVER_QUEUE = true;				//ServerQueue
@@ -59,6 +59,7 @@ public class Config {
 	public static final String PREF_C2DM_RUNNING = "c2dm.running"; // C2DM Running ( Enabling or Disabling )
 	public static final String PREF_C2DM_RUNNING_STRING = "c2dm.running.status";
 	public static final String PREF_ADVERT_ID = "advert.id"; // Currently Displayed Advert Id
+	public static final String PREF_FCACHE_SIZE = "fcache.size"; // FileCache size of ImageLoader
 	
 	// -------------------------------------------------------------------------------------------------------------
 	// --==MISC==---------------------------------------------------------------------------------------------------

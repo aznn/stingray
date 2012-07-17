@@ -22,6 +22,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.xdev.obliquity.Config;
+import com.xdev.obliquity.Obliquity;
 import com.xdev.obliquity.R;
 
 public class ImageLoader {
@@ -33,22 +34,18 @@ public class ImageLoader {
     FileCache fileCache;
     private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService; 
-    int stub_id;
+    int stub_id = R.drawable.stub;
     
     // pass 0 for default stub
-    public ImageLoader(Context context, int stubId){
-        fileCache=new FileCache(context);
+    public ImageLoader(Context context){
+    	Obliquity app = (Obliquity)context;
+        fileCache=new FileCache(context, app.getUtil());
+        app = null; // Possibly redundant
         executorService=Executors.newFixedThreadPool(5);
-        
-        if(stubId != 0) 
-        	stub_id = stubId;
-        else
-        	stub_id = R.drawable.stub;
-        
     }
     
     /*
-     * @Param : ReqSize : Make sure the largest requiredSize of the URL is used. Event if two calls to DisplayImage
+     * @Param : ReqSize : Make sure the largest requiredSize of the URL is used. Even if two calls to DisplayImage
      *                    is made with different reqSize, First calls reqSize will only be considered. Since second time 
      *                    the image would be loaded from cache
      */
@@ -97,6 +94,7 @@ public class ImageLoader {
             OutputStream os = new FileOutputStream(f);
             Utils.CopyStream(is, os);
             os.close();
+            fileCache.newFileSize(f.length()); // Update FileCache's mDirSize
             bitmap = decodeFile(f, REQUIRED_SIZE);
             return bitmap;
         } catch (Exception ex){
@@ -199,5 +197,20 @@ public class ImageLoader {
         memoryCache.clear();
         fileCache.clearCache();
     }
-
+    
+    
+    // Sets a custom Stub resource
+    public void setStub(int ID) {
+    	stub_id = ID;
+    }
+    
+    // Resets stub resource to the default R.drawable.stub
+    public void resetStub() {
+    	stub_id = R.drawable.stub;
+    }
+    
+    // Returns the instance to FileCache
+    public FileCache getFileCache() {
+    	return fileCache;
+    }
 }

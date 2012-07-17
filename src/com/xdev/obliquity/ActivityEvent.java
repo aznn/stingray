@@ -110,10 +110,11 @@ public class ActivityEvent extends TrackedActivity {
 	}
 	
 	@Override
-	public void onStop() {
-		super.onStop();
+	public void onPause() {
+		super.onPause();
 		Log.d(TAG, "Event unsubscribing");
 		appState.unsubscribe();
+		appState.commitDirectorySize(); // Saves directory size of ImageLoader class.
 	}
 	
 	// END LIFECYCLE FUNCTIONS
@@ -262,7 +263,7 @@ public class ActivityEvent extends TrackedActivity {
     		this.mSQueue = mSQueue;
     		
     		// ImageLoader(context, image_loading_stub_R_Id, REQUIRED_SIZE)
-    		imgLoader = new ImageLoader(context, 0);
+    		imgLoader = appState.getImageLoader();
     		tracker = EasyTracker.getTracker();
     		
     		setRSVPHistory();

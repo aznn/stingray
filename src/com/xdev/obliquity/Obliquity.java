@@ -1,9 +1,12 @@
 package com.xdev.obliquity;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+
+import com.fedorvlasov.lazylist.ImageLoader;
 
 public class Obliquity extends Application {
 	
@@ -16,8 +19,10 @@ public class Obliquity extends Application {
 	private boolean chSuccess = false; // Status of Last Cache
 	private boolean dlFinished = false; // Weather a previous download has finished
 	private boolean init = false;
+	
 	private DownloadHandler mDownloadHandler = null;
 	private Util mUtil = null;
+	private ImageLoader mImgLoader = null;
 	
 	private Handler mHandler; // Handler for DownloadHandler class
 	
@@ -255,6 +260,23 @@ public class Obliquity extends Application {
 		
 		else
 			return mDownloadHandler.getAdvertId();
+	}
+	
+	// Returns the instance of ImageLoader class
+	public ImageLoader getImageLoader() {
+		if(mImgLoader == null)
+			mImgLoader = new ImageLoader((Context)this);
+		
+		return mImgLoader;
+	}
+	
+	// Saves the directory size to memory, (Directory used to cache Downloaded Images)
+	// Must be called on onPause() of any activity using ImageLoader for accuracy
+	public void commitDirectorySize() {
+		if(mImgLoader == null)
+			mImgLoader = new ImageLoader(this);
+		
+		mImgLoader.getFileCache().commmitDirSize();
 	}
 	// END PUBLIC METHODS
 }
