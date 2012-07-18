@@ -31,7 +31,8 @@ public class FileCache {
     PriorityQueue<String> pQueue;
     Hashtable<String, String> mFiles; // mFiles<URLHash, URLHash_UnixTime> 
     
-    long maxDirectorySize;
+    final long maxDirectorySize = 20 * 1024 * 1024; 		// 20MB
+    final long cleanupDirCache = 8 * 1024 * 1024; 		// 8 MB cleared when cache becomes full
     
     
     public FileCache(Context context, Util util){
@@ -51,10 +52,7 @@ public class FileCache {
         if((mDirSize = mUtil.getLong(KEY, -99)) == -99) 
         	initDirSize(); // If Util has no dirSize calculated
         
-        maxDirectorySize = mUtil.getInt(Config.PREF_MAX_CACHE_SIZE, 15);
         if(DEBUG) Log.d(TAG, "MAX CACHE SIZE : " + maxDirectorySize + " MB");
-        
-        maxDirectorySize = maxDirectorySize * 1024 * 1024;
         
         setupDirectoryOverflow();
         
@@ -128,9 +126,12 @@ public class FileCache {
             
             if(DEBUG) Log.d(TAG, "Creating File, Fname : " + filename);
         }
-       
-            
+        
         File f = new File(cacheDir, filename);
+        
+        pQueue.add(filename);
+        mFiles.put(hash, filename);
+        
         return f;
         
     }
@@ -147,13 +148,12 @@ public class FileCache {
     	
     	if(recursiveCall) setupDirectoryOverflow(); //Rebuilt tree if this is a recursive call
     	
-    	final int delSize = 5 * 1024 * 1024; //5MB of data
     	int delBytes = 0;
     	
     	File f;
     	String filename;
     	int i = 0;
-    	while(delBytes <= delSize) {
+    	while(delBytes <= cleanupDirCache) {
     		filename = pQueue.poll();
     		
     		if(DEBUG) Log.d(TAG, "Deleting file : " + filename);
@@ -172,7 +172,7 @@ public class FileCache {
     	
     	mDirSize -= delBytes;
     	
-    	if(!recursiveCall && delBytes < delSize) // If deletedBytes was less than 5MB, probably because the priorityQueue is not built properly
+    	if(!recursiveCall && delBytes < cleanupDirCache) // If deletedBytes was less than 5MB, probably because the priorityQueue is not built properly
     		cleanCache(true); // Try again with rebuilding of whole priority queue
     	
     	if(DEBUG) Log.d(TAG, delBytes/1024. + " kb of files deleted | No. of files deleted : " + i);
@@ -235,7 +235,7 @@ public class FileCache {
         for(File f:files)
             f.delete();
         
-        Toast.makeText(mContext, Math.ceil(mDirSize/1024./1024.) + "MB deleted", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, String.format("%.2f", mDirSize/1024./1024.0f) + "MB deleted", Toast.LENGTH_SHORT).show();
         mDirSize = 0;
         commmitDirSize();
     }

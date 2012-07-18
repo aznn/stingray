@@ -60,7 +60,6 @@ public class Config {
 	public static final String PREF_C2DM_RUNNING_STRING = "c2dm.running.status";
 	public static final String PREF_ADVERT_ID = "advert.id"; // Currently Displayed Advert Id
 	public static final String PREF_FCACHE_SIZE = "fcache.size"; // FileCache size of ImageLoader
-	public static final String PREF_MAX_CACHE_SIZE = "max.cache.size"; // Maximum size of file cache in MB
 	
 	// -------------------------------------------------------------------------------------------------------------
 	// --==MISC==---------------------------------------------------------------------------------------------------

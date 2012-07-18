@@ -7,19 +7,19 @@
             android:title="Name" 
             android:key="SUMname"
             android:inputType="textPersonName" 
-            android:dialogMessage="Your Full Name"
+            android:dialogMessage=""
             android:dialogTitle="Name"/>
        	<EditTextPreference 
        	    android:title="Mobile" 
        	    android:key="SUMmobile" 
        	    android:inputType="phone"
-       	    android:dialogMessage="Mobile Number (without +91)" 
+       	    android:dialogMessage="Without +91" 
        	    android:dialogTitle="Mobile"/>
        	<EditTextPreference 
        	    android:title="Email" 
        	    android:inputType="textEmailAddress"
        	    android:key="SUMemail" 
-       	    android:dialogMessage="Email ID" 
+       	    android:dialogMessage="" 
        	    android:dialogTitle="Email"/>
        	
     </PreferenceCategory>
@@ -33,10 +33,17 @@
     </PreferenceCategory>
     
     <PreferenceCategory android:title="Others">
+        <PreferenceScreen 
+            	android:key="cache"
+            	android:title="Image Cache Size: "
+            	android:summary="Tap to clear the cache" >
+            
+        </PreferenceScreen>
+        
 		<PreferenceScreen
                 android:key="share"
                 android:title="Share"
-                android:summary="Share this app with your friends"
+                android:summary="Tell your friends about this app"
                 android:selectable="true">
         </PreferenceScreen>
         

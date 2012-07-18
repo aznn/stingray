@@ -22,7 +22,7 @@ import com.google.android.apps.analytics.easytracking.EasyTracker;
 import com.google.android.apps.analytics.easytracking.TrackedPreferenceActivity;
 import com.google.android.c2dm.C2DMessaging;
 
-public class Preferences extends TrackedPreferenceActivity implements OnSharedPreferenceChangeListener{
+public class Preferences extends TrackedPreferenceActivity implements OnSharedPreferenceChangeListener, OnPreferenceClickListener{
 	
 	private final String TAG = Config.TAG_PREFERENCE;
 	private final boolean DEBUG = Config.DEBUG_PREFERENCE;
@@ -100,10 +100,29 @@ public class Preferences extends TrackedPreferenceActivity implements OnSharedPr
 //			}
 //		});
 		
+		PreferenceScreen cacheSize = (PreferenceScreen)findPreference("cache");
+		long cache = mUtil.getLong(Config.PREF_FCACHE_SIZE, 0);
+		cacheSize.setTitle("Image Cache Size: " + String.format("%.2f", cache/1024./1024.0f) + " MB");
+		cacheSize.setOnPreferenceClickListener(this);
 		setupPushStatus(false);
 		
 	}
 
+	@Override
+	public boolean onPreferenceClick(Preference p) {
+		String key = p.getKey();
+		if(DEBUG) Log.d(TAG, "Preference clicked, key : " + key);
+		
+		if(key.equals("cache")) {
+			appState.clearFileCache();
+			appState.commitDirectorySize();
+			p.setTitle("Image Cache Size : 0.0 MB");
+			return true;
+		}
+		
+		return false;
+	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
