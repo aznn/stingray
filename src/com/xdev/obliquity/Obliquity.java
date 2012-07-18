@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.facebook.android.Facebook;
 import com.fedorvlasov.lazylist.FileCache;
 import com.fedorvlasov.lazylist.ImageLoader;
 
@@ -47,6 +48,11 @@ public class Obliquity extends Application {
 	     }
 		*/
 		super.onCreate();
+		
+		mUtil = new Util(this);
+		
+		// Initiates all facebook related components
+		initFacebook();
 	}
 
 	private Handler sHandler; // Handler of the subscriber
@@ -284,8 +290,8 @@ public class Obliquity extends Application {
 	}
 	
 	public void commitDirectorySize() {
-		setupFileCache();
-		mFileCache.commmitDirSize();
+		setupFileCache(); 					//Makes sure FileCache is initialized
+		mFileCache.commmitDirSize();		//Saves current directorysize to preferences
 	}
 	
 	public void clearFileCache() {
@@ -294,4 +300,17 @@ public class Obliquity extends Application {
 	}
 	
 	// END PUBLIC METHODS
+	
+	
+	
+	/*
+	 * FACEBOOK INTEGRATION
+	 *
+	 */
+	Facebook facebook;
+	
+	private void initFacebook() {
+		
+	}
+	
 }

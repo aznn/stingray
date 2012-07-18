@@ -19,6 +19,8 @@ public class Config {
 	public static final String TAG_IMGLOAD_LOADER = "--IMGLOAD--ImageLoader";
 	public static final String TAG_IMGLOAD_FILECH = "--IMGLOAD--FileChche";
 	public static final String TAG_IMGLOAD_MEMCACHE = "--IMGLOAD--MemCache";
+	public static final String TAG_ALBUM_VIEW = "--albumView";
+	public static final String TAG_ALBUM_DOWNLOADER = "--albumDownloader";
 	//GOGLE
 	public static final String TAG_GOOGLE_BROADCAST_RECIEVER = "--broadcastRCVR";
 	public static final String TAG_GOOGLE_C2DMESSENGER = "--google(c2dmMessenger)";
@@ -35,6 +37,8 @@ public class Config {
 	public static final boolean DEBUG_UTIL = true;						//Util
 	public static final boolean DEBUG_PREFERENCE = true;				//Preference
 	public static final boolean DEBUG_SERVER_QUEUE = true;				//ServerQueue
+	public static final boolean DEBUG_ALBUM_VIEW = true;				//Album View
+	public static final boolean DEBUG_ALBUM_DOWNLOADER = true;			//AlbumDownloader
 	//IMAGELOADER
 	public static final boolean DEBUG_IMGLOAD_LOADER = true;			//ImageLoader
 	public static final boolean DEBUG_IMGLOAD_FILECH = true;					//FileCache

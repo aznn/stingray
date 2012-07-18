@@ -39,6 +39,8 @@
         <activity android:name=".ActivityAboutObliquity" />
         <activity android:name=".ActivityImageViewer" />
         <activity android:name=".Preferences" />
+        <activity android:name=".ActivityAlbumView" />
+        <activity android:name=".ActivityGalleryGrid" />
         
         <service android:name=".C2DMReceiver" />
         
