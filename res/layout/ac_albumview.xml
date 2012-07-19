@@ -4,11 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <GridView
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="2" >
-    </GridView>
+        android:layout_height="match_parent"
+        android:paddingTop="2dip"
+        android:numColumns="auto_fit"
+        android:columnWidth="148dp"
+        android:stretchMode="spacingWidthUniform"
+        android:drawSelectorOnTop="false"
+        android:cacheColorHint="#000000"
+        android:background="#000000"
+        android:listSelector="#000000"/>
 
 </LinearLayout>

@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -136,23 +137,44 @@ public class ActivityAlbumView extends Activity{
 
 	    // create a new ImageView for each item referenced by the Adapter
 	    public View getView(int position, View convertView, ViewGroup parent) {
-	        ImageView imageView;
-	        if (convertView == null) {  // if it's not recycled, initialize some attributes
-	            imageView = new ImageView(mContext);
-	            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-	            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-	            imageView.setPadding(8, 8, 8, 8);
+//	        ImageView imageView;
+//	        if (convertView == null) {  // if it's not recycled, initialize some attributes
+//	            imageView = new ImageView(mContext);
+//	            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+//	            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//	            imageView.setPadding(8, 8, 8, 8);
+//	        } else {
+//	            imageView = (ImageView) convertView;
+//	        }
+//
+//	        mImgLoader.DisplayImage(buildURL(albumIDs.get(position)), imageView, 85);
+//	        imageView.setTag(albumIDs.get(position));
+//	        return imageView;
+	        
+	        View v;
+	        if (convertView == null) {
+	        	LayoutInflater inflater = (LayoutInflater) mContext
+    					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	            v = inflater.inflate(R.layout.album_item, null);
 	        } else {
-	            imageView = (ImageView) convertView;
+	            v = convertView;
 	        }
 
-	        mImgLoader.DisplayImage(buildURL(albumIDs.get(position)), imageView, 85);
-	        imageView.setTag(albumIDs.get(position));
-	        return imageView;
+//	        TextView titleView = (TextView) v.findViewById(R.id.title);
+
+	        GalleryPickerItem iv =
+	                (GalleryPickerItem) v.findViewById(R.id.thumbnail);
+	        mImgLoader.DisplayImage(buildURL(albumIDs.get(position)), iv, 150);
+            v.setTag(albumIDs.get(position));
+	        
+//          String title = item.mName + " (" + item.mCount + ")";
+//          titleView.setText(title);	  
+            
+            return v;
 	    }
 	   
 	   private String buildURL(String ID) {
-		   String format = "https://graph.facebook.com/%s/picture?type=thumbnail";
+		   String format = "https://graph.facebook.com/%s/picture?type=album";
 		   return String.format(format, ID);
 	   }
 
