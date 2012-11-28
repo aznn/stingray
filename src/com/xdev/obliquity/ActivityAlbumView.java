@@ -31,7 +31,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 
 import com.fedorvlasov.lazylist.ImageLoader;
 import com.google.gson.Gson;

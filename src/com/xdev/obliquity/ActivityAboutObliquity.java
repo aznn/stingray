@@ -3,7 +3,7 @@ package com.xdev.obliquity;
 import android.os.Bundle;
 import android.view.Window;
 
-import com.WazaBe.HoloEverywhere.R;
+import com.xdev.obliquity.R;
 import com.google.android.apps.analytics.easytracking.TrackedActivity;
 
 public class ActivityAboutObliquity extends TrackedActivity{

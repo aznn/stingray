@@ -61,7 +61,9 @@ public abstract class C2DMBaseReceiver extends Service {
     private static final String WAKELOCK_KEY = "C2DM_LIB";
 
     private static PowerManager.WakeLock mWakeLock;
-    private final String senderId;
+    
+    @SuppressWarnings("unused")
+	private final String senderId;
 
     
     // ------------------------------------------------- CUSTOM CODE
