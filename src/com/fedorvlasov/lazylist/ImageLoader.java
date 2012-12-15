@@ -41,7 +41,7 @@ public class ImageLoader {
     	Obliquity app = (Obliquity)context;
         fileCache=new FileCache(context, app.getUtil());
         app = null; // Possibly redundant
-        executorService=Executors.newFixedThreadPool(5);
+        executorService=Executors.newFixedThreadPool(Config.IMAGELOADER_THREADS);
     }
     
     /*
@@ -54,6 +54,7 @@ public class ImageLoader {
     	if(DEBUG) Log.i(TAG, "DisplayImage : " + url);
     	
         imageViews.put(imageView, url);
+        
         Bitmap bitmap=memoryCache.get(url);
         if(bitmap!=null)
             imageView.setImageBitmap(bitmap);

@@ -21,6 +21,8 @@ public class Config {
 	public static final String TAG_IMGLOAD_MEMCACHE = "--IMGLOAD--MemCache";
 	public static final String TAG_ALBUM_VIEW = "--albumView";
 	public static final String TAG_ALBUM_DOWNLOADER = "--albumDownloader";
+	public static final String TAG_GALLERY_VIEW = "--galleryView";
+	public static final String TAG_GALLERY_DOWNLOADER = "--galleryDownloader";
 	//GOGLE
 	public static final String TAG_GOOGLE_BROADCAST_RECIEVER = "--broadcastRCVR";
 	public static final String TAG_GOOGLE_C2DMESSENGER = "--google(c2dmMessenger)";
@@ -86,6 +88,8 @@ public class Config {
 	public static final int TIMEOUT_SOCKET = 3000;
 	public static final int TIMEOUT_CONN = 3000;
 	
+	// How many Images to download concurrently by ImageLoader
+	public static final int IMAGELOADER_THREADS = 2;
 	
 	// --------------------------------------------------------------------------------------------------------------
 	// --==NOTIFICATIONS==-------------------------------------------------------------------------------------------

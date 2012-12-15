@@ -1,20 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
+        <ProgressBar
+            android:id="@+id/album_progressbar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+        
+       <TextView
+            android:id="@+id/album_loading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/album_progressbar"
+            android:layout_centerHorizontal="true"
+            android:text="Fetching Albums.." />
+        
+    </RelativeLayout>
+    
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="2dip"
         android:numColumns="auto_fit"
-        android:columnWidth="148dp"
-        android:stretchMode="spacingWidthUniform"
-        android:drawSelectorOnTop="false"
-        android:cacheColorHint="#000000"
-        android:background="#000000"
-        android:listSelector="#000000"/>
+        android:paddingTop="2dip"
+        android:columnWidth="125dp"
+        android:verticalSpacing="8dp"
+        android:horizontalSpacing="5dp"
+        android:stretchMode="spacingWidthUniform"/>
 
-</LinearLayout>
+</FrameLayout>

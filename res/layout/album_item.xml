@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="148dip"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="125dp"
+    android:layout_height="125dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+    
+    <ImageView
+        android:id="@+id/album_image"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:scaleType="center"
+        android:src="@drawable/nothumb" />
 
-    <com.xdev.obliquity.GalleryPickerItem android:id="@+id/thumbnail"
-            android:layout_width="142dip"
-            android:layout_height="142dip"
-            android:scaleType="centerCrop" />
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-    <TextView android:id="@+id/title"
-            android:paddingTop="3dip"
-            android:paddingBottom="9dip"
-            android:paddingRight="13dip"
-            android:paddingLeft="13dip"
-            android:gravity="top|center_horizontal"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:textColor="#ffffffff"
-            android:ellipsize="marquee"
-            android:text="Hello World!"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-</LinearLayout>
+            <TextView
+                android:id="@+id/album_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:text="Hello World!"
+                android:textColor="#ffffffff"
+                android:textSize="15sp" />
+
+    </RelativeLayout>
+
+</FrameLayout>

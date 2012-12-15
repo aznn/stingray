@@ -142,7 +142,7 @@ public class Preferences extends TrackedPreferenceActivity implements OnSharedPr
 		if(sendToServer) { // User details was changed
 			if(DEBUG) Log.d(TAG, "Adding a send data to server to queue");
 			
-			// TODO : IF Needed make a seperate local variable of mSQueue
+			// TODO : IF Needed make a separate local variable of mSQueue
 			appState.getServerQueue().addQueue(ServerQueue.REGISTER);
 			
 			if(!sharedPreferences.getString("SUMname", "").equals("") && 

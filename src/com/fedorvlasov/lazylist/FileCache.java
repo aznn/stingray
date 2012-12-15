@@ -106,6 +106,23 @@ public class FileCache {
         }
     }
     
+    // Return File if exists, else NULL
+    public File getFileExists(String url) {
+    	String filename;
+        
+        String hash = String.valueOf(url.hashCode());
+        
+        if(mFiles.containsKey(hash)) {
+        	filename = mFiles.get(hash);
+        	if(DEBUG) Log.d(TAG, "File already saved. getting file : " + filename);
+        } else {
+            return null;
+        }
+        
+        File f = new File(cacheDir, filename);
+        
+        return f;
+    }
     
     // Files are stored in the formst urlHash|unixTime
     public File getFile(String url){

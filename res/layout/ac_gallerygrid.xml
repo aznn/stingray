@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ProgressBar
+            android:id="@+id/gallery_progressbar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+        
+       <TextView
+            android:id="@+id/gallery_loading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/gallery_progressbar"
+            android:layout_centerHorizontal="true"
+            android:text="Fetching the pictures.." />
+        
+    </RelativeLayout>
 
     <GridView
         android:id="@+id/gallerygrid_gridview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </GridView>
+        android:layout_height="match_parent"
+        android:numColumns="auto_fit"
+        android:paddingTop="10dp"
+        android:columnWidth="100dp"
+        android:horizontalSpacing="2dp"
+        android:verticalSpacing="5dp"
+        android:stretchMode="spacingWidthUniform"/>
 
-</LinearLayout>
+</FrameLayout>

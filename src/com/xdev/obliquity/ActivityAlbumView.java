@@ -31,6 +31,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fedorvlasov.lazylist.ImageLoader;
 import com.google.gson.Gson;
@@ -65,7 +69,7 @@ public class ActivityAlbumView extends Activity{
         
         // No Internet Access
         if(!mUtil.isOnline())
-        	displayError("No Internet Access");
+        	displayError("Photos feature requires an internet connection.");
         
         // Loads JSON of the albums
         new LoadJSONTask().execute();
@@ -73,11 +77,13 @@ public class ActivityAlbumView extends Activity{
 	
 	private void jsonDownloaded(ReturnedData data) {
 		if(data == null) {
-			displayError("Download Error");
+			displayError("We could not connect to Facebook.");
 			return;
 		}
 		
 		List<String> IDs = new ArrayList<String>();
+		List<String> titles = new ArrayList<String>();
+		
 		mData = new Hashtable<String, String>();
 		
 		for(Data d:data.data) {
@@ -85,16 +91,24 @@ public class ActivityAlbumView extends Activity{
 				continue;
 			
 			IDs.add(d.coverPhotoID);
+			titles.add(d.title);
 			mData.put(d.coverPhotoID, d.ID);
 		}
 		
-		initGridView(IDs);
+		initGridView(IDs, titles);
 	}
 	
 	// Sets up the gridview
-	private void initGridView(List<String> val) {
+	private void initGridView(List<String> val, List<String> titles) {
+		// Hide loading progressbar
+		ProgressBar pbar = (ProgressBar) findViewById(R.id.album_progressbar);
+		TextView ptext = (TextView) findViewById(R.id.album_loading_text);
+		pbar.setVisibility(View.INVISIBLE);
+		ptext.setVisibility(View.INVISIBLE);
+		
+		
 		GridView mGridView = (GridView) findViewById(R.id.gridView);
-		mGridView.setAdapter(new ImageAdapter(this, val));
+		mGridView.setAdapter(new ImageAdapter(this, val, titles));
 		
 		mGridView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -112,9 +126,10 @@ public class ActivityAlbumView extends Activity{
 		});
 	}
 	
-	// Displays an error cleans up grid. Display Only Error
+	// Displays an error, exists activity
 	private void displayError(String error) {
-		
+		Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+		finish(); // Close this activity
 	}
 	
 	/*
@@ -124,10 +139,12 @@ public class ActivityAlbumView extends Activity{
 	public class ImageAdapter extends BaseAdapter {
 	    private Context mContext;
 	    private List<String> albumIDs;
+	    private List<String> mTitles;
 	    
-	    public ImageAdapter(Context c, List<String> albumIds) {
+	    public ImageAdapter(Context c, List<String> albumIds, List<String> titles) {
 	        mContext = c;
 	        albumIDs = albumIds;
+	        mTitles = titles;
 	    }
 
 	    public int getCount() { return albumIDs.size(); }
@@ -161,9 +178,11 @@ public class ActivityAlbumView extends Activity{
 
 //	        TextView titleView = (TextView) v.findViewById(R.id.title);
 
-	        GalleryPickerItem iv =
-	                (GalleryPickerItem) v.findViewById(R.id.thumbnail);
+	        ImageView iv = (ImageView) v.findViewById(R.id.album_image);
+	        TextView title = (TextView) v.findViewById(R.id.album_title);
+	      
 	        mImgLoader.DisplayImage(buildURL(albumIDs.get(position)), iv, 150);
+	        title.setText(mTitles.get(position));
             v.setTag(albumIDs.get(position));
 	        
 //          String title = item.mName + " (" + item.mCount + ")";
@@ -187,7 +206,7 @@ public class ActivityAlbumView extends Activity{
 	 */
 	private class LoadJSONTask extends AsyncTask<Void, Void, String> {
 		
-		String graphApiURL = "https://graph.facebook.com/LeoMessi/albums?fields=name,cover_photo&limit=100";
+		String graphApiURL = "https://graph.facebook.com/obliquityindia/albums?fields=name,cover_photo&limit=100";
 		
 		@Override
 		protected String doInBackground(Void... arg0) {

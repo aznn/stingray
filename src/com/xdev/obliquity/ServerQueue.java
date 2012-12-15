@@ -389,9 +389,12 @@ public class ServerQueue {
 		if(Queue.contains(sRequest))
 			return;
 		else {
-			if(Queue.equals(""))
-				Queue = Queue.concat(sRequest);
-			else
+			
+// If we dont add the first semicolon we cant remove the first item ( VERIFY )
+//			if(Queue.equals(""))
+//				Queue = Queue.concat(sRequest);
+//			else
+			
 				Queue = Queue.concat(";" + sRequest);
 		}
 		

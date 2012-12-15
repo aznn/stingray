@@ -1,6 +1,7 @@
 package com.xdev.obliquity;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -18,15 +19,23 @@ import org.apache.http.params.HttpParams;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fedorvlasov.lazylist.ImageLoader;
 import com.google.gson.Gson;
@@ -37,11 +46,12 @@ import com.xdev.obliquity.ActivityGalleryGrid.ReturnedDataGalleryGrid.iData;
 
 public class ActivityGalleryGrid extends Activity{
 	
-	private String TAG = "TEST";
+	private String TAG = Config.TAG_GALLERY_VIEW;
 	private boolean DEBUG = true;
 	
 	Util mUtil;
 	Obliquity superState;
+	Context mContext;
 	ImageLoader mImgLoader;
 	String ID;
 	
@@ -50,6 +60,7 @@ public class ActivityGalleryGrid extends Activity{
 		super.onCreate(bundle);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.ac_gallerygrid);
+        mContext = this;
         
         // Setup local classes
         superState = (Obliquity)getApplication();
@@ -65,6 +76,7 @@ public class ActivityGalleryGrid extends Activity{
 	private void jsonDownloaded(ReturnedDataGalleryGrid data) {
 		if(data == null) {
 			Log.e(TAG, "Download Error");
+			displayError("We could not connect to Facebook.");
 			return;
 		}
 		
@@ -77,10 +89,50 @@ public class ActivityGalleryGrid extends Activity{
 		initGridView(URL);
 	}
 	
+	// Displays an error, exists activity
+		private void displayError(String error) {
+			Toast.makeText(mContext, error, Toast.LENGTH_SHORT).show();
+			finish(); // Close this activity
+		}
+		
+	
 	// Sets up the gridview
 	private void initGridView(List<String> val) {
+		// Hide loading progressbar
+		ProgressBar pbar = (ProgressBar) findViewById(R.id.gallery_progressbar);
+		TextView ptext = (TextView) findViewById(R.id.gallery_loading_text);
+		pbar.setVisibility(View.INVISIBLE);
+		ptext.setVisibility(View.INVISIBLE);
+				
+				
 		GridView mGridView = (GridView) findViewById(R.id.gallerygrid_gridview);
 		mGridView.setAdapter(new ImageAdapter(this, val));
+		
+		// Display the image Clicked
+		mGridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int arg2,
+					long arg3) {
+				String URL = (String) v.getTag(R.string.key_image_url);
+				
+				if(DEBUG) Log.d(TAG, "Viewing image : " + URL);
+				
+				File f = mImgLoader.getFileCache().getFileExists(URL);
+				
+				if(f == null) {
+					Log.e(TAG, "View Image : File is not in cache!");
+					return;
+				}
+				
+				// Create and fire intent to display file
+				Intent intent = new Intent();
+				intent.setAction(android.content.Intent.ACTION_VIEW);
+				intent.setDataAndType(Uri.fromFile(f), "image/png");
+				startActivity(intent);
+			}
+		
+		});
 	}
 	
 	/*
@@ -102,18 +154,33 @@ public class ActivityGalleryGrid extends Activity{
 
 	    // create a new ImageView for each item referenced by the Adapter
 	    public View getView(int position, View convertView, ViewGroup parent) {
-	        ImageView imageView;
-	        if (convertView == null) {  // if it's not recycled, initialize some attributes
-	            imageView = new ImageView(mContext);
-	            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-	            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-	            imageView.setPadding(8, 8, 8, 8);
-	        } else {
-	            imageView = (ImageView) convertView;
-	        }
+//	        ImageView imageView;
+//	        if (convertView == null) {  // if it's not recycled, initialize some attributes
+//	            imageView = new ImageView(mContext);
+//	            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+//	            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//	            imageView.setPadding(8, 8, 8, 8);
+//	        } else {
+//	            imageView = (ImageView) convertView;
+//	        }
 
-	        mImgLoader.DisplayImage(albumIDs.get(position), imageView, 85);
-	        return imageView;
+	    	View v;
+	    	if (convertView == null) {
+	    		LayoutInflater inflater = (LayoutInflater) mContext
+    					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	            v = inflater.inflate(R.layout.gallery_item, null);
+	    	} else {
+	    		v = convertView;
+	    	}
+	    	
+	    	ImageView img = (ImageView)v.findViewById(R.id.gallery_image);
+	    	
+	    	String url = albumIDs.get(position);
+	        mImgLoader.DisplayImage(url, img, 125);
+	        
+	        // URL tag will be used when sending the view intent
+	        v.setTag(R.string.key_image_url, url);	        
+	        return v;
 	    }
 
 	@Override
