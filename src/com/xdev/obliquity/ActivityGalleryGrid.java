@@ -17,7 +17,9 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -30,6 +32,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -132,6 +135,32 @@ public class ActivityGalleryGrid extends Activity{
 				startActivity(intent);
 			}
 		
+		});
+		
+		// Copy the URL to clipboard on long click on image
+		mGridView.setOnItemLongClickListener(new OnItemLongClickListener(){
+
+			@SuppressLint("NewApi")
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View v,
+					int arg2, long arg3) {
+				String URL = (String) v.getTag(R.string.key_image_url);
+				
+				// This should be much shorter than this. God bless Android Fragmentation.
+				int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+				if (currentapiVersion >= android.os.Build.VERSION_CODES.HONEYCOMB){
+				     android.content.ClipboardManager clipboard =  (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE); 
+				        ClipData clip = ClipData.newPlainText("URL", URL);
+				        clipboard.setPrimaryClip(clip); 
+				} else{
+					android.text.ClipboardManager clipboard = (android.text.ClipboardManager)getSystemService(CLIPBOARD_SERVICE); 
+				    clipboard.setText(URL);
+				}
+				
+			    Toast.makeText(mContext, "URL Copied to Clipboard.", Toast.LENGTH_SHORT).show();
+				return true;
+			}
+			
 		});
 	}
 	

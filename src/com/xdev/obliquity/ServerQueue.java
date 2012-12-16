@@ -452,7 +452,11 @@ public class ServerQueue {
 		String[] qArray = Queue.split(";");
 		
 		for(int i = 0; i < qArray.length; i++) {
-			qList.add(Integer.parseInt(qArray[i]));
+			try {
+				qList.add(Integer.parseInt(qArray[i]));
+			} catch (Exception e) {
+				Log.e(TAG, "Server Queue parsing error : " + qArray[i]);
+			}
 		}
 		
 		return qList;

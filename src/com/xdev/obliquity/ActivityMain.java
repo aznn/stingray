@@ -9,8 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -52,6 +56,12 @@ public class ActivityMain extends TrackedActivity implements OnClickListener{
         event.setOnClickListener(this);
         pref.setOnClickListener(this);
         obliq.setOnClickListener(this);
+        
+        feed.setOnTouchListener(mOnTouchListener);
+        event.setOnTouchListener(mOnTouchListener);
+        pref.setOnTouchListener(mOnTouchListener);
+        obliq.setOnTouchListener(mOnTouchListener);
+ 
         
         // Initiates the Util Class
         mUtil = appState.getUtil();
@@ -147,6 +157,7 @@ public class ActivityMain extends TrackedActivity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
+		
 		Intent intent = null;
 		
 		switch(v.getId()) {
@@ -173,6 +184,28 @@ public class ActivityMain extends TrackedActivity implements OnClickListener{
 		
 		startActivity(intent);
 	}
+			
+	
+	// Animate button clicks
+	OnTouchListener mOnTouchListener = new OnTouchListener() {
+
+		@Override
+		public boolean onTouch(View v, MotionEvent e) {
+			
+			ImageView mView = (ImageView)v;
+			
+			if (e.getAction() == MotionEvent.ACTION_DOWN) {
+				mView.setAlpha(100);
+				
+			} else if (e.getAction() == MotionEvent.ACTION_UP) {
+				mView.setAlpha(255);
+			}
+			
+			
+			return false;
+		}
+		
+	};
 	
 	public static Intent createIntent(Context context) {
         Intent i = new Intent(context, ActivityMain.class);
