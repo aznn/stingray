@@ -27,7 +27,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -92,7 +91,7 @@ public class ActivityEvent extends TrackedActivity {
         			case 11: 
         				cacheSuccessful();
         				break;
-        			// Cache Failed would not propogate, Handled by Obliquity class
+        			// Cache Failed would not propagate, Handled by Obliquity class
         		}	
         	}
         };
@@ -198,7 +197,7 @@ public class ActivityEvent extends TrackedActivity {
 	
 	
 	// -----------------------------------------------------------------------
-	// Initialize Adapter
+	// Initialise Adapter
 	private void setAdapter(List<Events> values) {
 		if(DEBUG) Log.i(TAG, "Setting up Adapter with count : " + values.size());
 		
@@ -318,7 +317,7 @@ public class ActivityEvent extends TrackedActivity {
         	if(DEBUG) Log.d(TAG, "Queue array : " + Arrays.toString(h));
     	}
     	
-    	// Swaps the dataset
+    	// Swaps the data set
     	public void changeDataSet(List<Events> values) {
     		this.values = values;
     		this.notifyDataSetChanged();
@@ -363,7 +362,7 @@ public class ActivityEvent extends TrackedActivity {
     			//DisplayImage(URL, ImageView, RequiredSize)
     			imgLoader.DisplayImage(thumbURL + values.get(groupPosition).eventId + ".jpg", holder.thumb, 100);
     		} else {
-    			// TODO : If noticed a lag, try with setting a tag with a boolean check to avoid reassigning everytime. 
+    			// TODO : If noticed a lag, try with setting a tag with a boolean check to avoid reassigning every time. 
     			holder.thumb.setImageResource(R.drawable.nothumb);
     		}
     		
