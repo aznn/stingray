@@ -4,9 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <RelativeLayout 
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="180dp"
+        android:layout_gravity="center" >
 
         <ProgressBar
             android:id="@+id/album_progressbar"
@@ -25,15 +26,19 @@
         
     </RelativeLayout>
     
-    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    <GridView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="500dp"
+        android:layout_gravity="bottom"
+        android:columnWidth="125dp"
+        android:horizontalSpacing="5dp"
         android:numColumns="auto_fit"
         android:paddingTop="2dip"
-        android:columnWidth="125dp"
-        android:verticalSpacing="8dp"
-        android:horizontalSpacing="5dp"
-        android:stretchMode="spacingWidthUniform"/>
+        android:stretchMode="spacingWidthUniform"
+        android:verticalSpacing="8dp" />
+
+    
 
 </FrameLayout>

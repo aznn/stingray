@@ -8,6 +8,8 @@
     <string name="app_version">1.2</string>
 	<string name="advert">XDev | Rices Inc. | Sauza | Millers | Teachers</string>   
 
-    <string name="events">Events</string>
+    <string name="events">Events</string>   
+
+    <string name="photos">Photos</string>
 
 </resources>

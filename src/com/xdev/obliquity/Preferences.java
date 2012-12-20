@@ -202,7 +202,7 @@ public class Preferences extends TrackedPreferenceActivity implements OnSharedPr
 		else if(key.equals("pushNotifications")) {
 			if(pushStatus.isChecked()) { // Enabled
 				mUtil.addBoolean(Config.PREF_C2DM_RUNNING, true);
-				mUtil.addString(Config.PREF_C2DM_RUNNING, "Enabling Push Notifications");
+//				mUtil.addString(Config.PREF_C2DM_RUNNING, "Enabling Push Notifications");
 				pushStatus.setEnabled(false);
 				pushStatus.setSummary("Enabling Push Notifications");
 				C2DMessaging.register(getApplication());
@@ -212,7 +212,7 @@ public class Preferences extends TrackedPreferenceActivity implements OnSharedPr
 			
 			else { // If disabled
 				mUtil.addBoolean(Config.PREF_C2DM_RUNNING, true);
-				mUtil.addString(Config.PREF_C2DM_RUNNING, "Disabling Push Notifications");
+//				mUtil.addString(Config.PREF_C2DM_RUNNING, "Disabling Push Notifications");
 				pushStatus.setSummary("Disabling Push Notifications");
 				pushStatus.setEnabled(false);
 				C2DMessaging.unregister(getApplication());
