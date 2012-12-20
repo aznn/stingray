@@ -24,6 +24,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -466,12 +469,36 @@ public class ActivityEvent extends TrackedActivity {
     	
     	// Asks for rsvp confirmation
     	public void dialogConfirmRsvp(final View v) {
-    		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+			
+			View friendsView = getLayoutInflater().inflate(R.layout.dialog_rsvp, null);
+			final CheckBox checkFriends = (CheckBox) friendsView.findViewById(R.id.check_friends);
+			final TextView textFriends = (TextView) friendsView.findViewById(R.id.text_friends);
+			
+			checkFriends.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+				@Override
+				public void onCheckedChanged(CompoundButton arg0, boolean checked) {
+					if (checked) 
+						textFriends.setVisibility(View.VISIBLE);
+					else
+						textFriends.setVisibility(View.GONE);
+				}
+			});
+			
+			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 			    @Override
 			    public void onClick(DialogInterface dialog, int which) {
 			        switch (which){
 			        case DialogInterface.BUTTON_POSITIVE:
-			            dialogRsvpFriends(v);
+			            
+			        	// rsvp for friends
+			        	if (checkFriends.isChecked()) {
+			        		tracker.trackEvent("Events", "RSVP Friends", "RSVP'd For Friends", 1);
+				            initiateRSVP(v, textFriends.getText().toString());
+			        	} else 
+			        		initiateRSVP(v, "");
+			        	
 			            break;
 
 			        case DialogInterface.BUTTON_NEGATIVE:
@@ -479,10 +506,13 @@ public class ActivityEvent extends TrackedActivity {
 			        }
 			    }
 			};
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-			builder.setMessage("Are you attending this event?").setPositiveButton("Let's Party!", dialogClickListener)
-			    .setNegativeButton("No", dialogClickListener).show();
+			
+			builder
+				   .setView(friendsView)
+				   .setTitle("RSVP")
+			       .setNegativeButton("No", dialogClickListener)
+			       .setPositiveButton("Let's Party!", dialogClickListener)
+			       .show();
     	}
     	
 		// Check if UserDetails is completed. If not asks for completion and redirects to preferences
@@ -506,52 +536,6 @@ public class ActivityEvent extends TrackedActivity {
 			    .setNegativeButton("No", dialogClickListener).show();
     	}
     	
-		// Ask if RSVP for friends. if Yes displays another dialog. If no calls RSVP function
-    	public void dialogRsvpFriends(final View v) {
-    		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-			    @Override
-			    public void onClick(DialogInterface dialog, int which) {
-			        switch (which){
-			        case DialogInterface.BUTTON_POSITIVE:
-			            rsvpFriends(v);
-			            break;
-
-			        case DialogInterface.BUTTON_NEGATIVE:
-			        	initiateRSVP(v, "");
-			        }
-			    }
-			};
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-			builder.setMessage("RSVP for your friends too?").setPositiveButton("Yes!", dialogClickListener)
-			    .setNegativeButton("No", dialogClickListener).show();
-    	}
-    	
-    	// Asks user to input the names of friends to RSVP
-    	public void rsvpFriends(final View v) {
-    		// Ask if RSVP for friends. if Yes displays another dialog. If no calls RSVP function
-    		
-    		final EditText eText = new EditText(mContext);
-    		
-    		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-			    @Override
-			    public void onClick(DialogInterface dialog, int which) {
-			        switch (which){
-			        case DialogInterface.BUTTON_POSITIVE:
-			        	tracker.trackEvent("Events", "RSVP Friends", "RSVP'd For Friends", 1);
-			            initiateRSVP(v, eText.getText().toString());
-			            break;
-
-			        case DialogInterface.BUTTON_NEGATIVE:
-			        	return; // RSVP process cancelled // TODO maybe ask abuot rsvp friends again ? 
-			        }
-			    }
-			}; 
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-			builder.setMessage("Enter the names of your friends seperated by a ',' ").setPositiveButton("I'm done!", dialogClickListener)
-			    .setNegativeButton("Cancel", dialogClickListener).setView(eText).show();
-    	}
     	
     	// Asks if the user wants to remove the RSVP (Confirmation dialog)
     	public void dialogConfirmRemoveRsvp(final View v) {
