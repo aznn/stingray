@@ -13,13 +13,12 @@
        	    android:title="Mobile" 
        	    android:key="SUMmobile" 
        	    android:inputType="phone"
-       	    android:dialogMessage="Without +91" 
+       	    android:hint="Without +91"
        	    android:dialogTitle="Mobile"/>
        	<EditTextPreference 
        	    android:title="Email" 
        	    android:inputType="textEmailAddress"
        	    android:key="SUMemail" 
-       	    android:dialogMessage="" 
        	    android:dialogTitle="Email"/>
        	
     </PreferenceCategory>
@@ -57,7 +56,7 @@
     	
     	<PreferenceScreen
                 android:key="screen_preference"
-                android:title="App Version"
+                android:title="Version"
                 android:summary="@string/app_version"
                 android:selectable="false">
         </PreferenceScreen>
