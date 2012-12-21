@@ -453,8 +453,7 @@ public class ActivityEvent extends TrackedActivity {
     		if(DEBUG) Log.d(TAG, "RSVP Button rsvp : " + rsvp + "| event : " + event);
     		
     		if(rsvp) {
-    			
-    			dialogConfirmRemoveRsvp(v);
+    			removeRSVP(v);
     			
     		} else {
     			
@@ -535,27 +534,6 @@ public class ActivityEvent extends TrackedActivity {
 			    .setNegativeButton("No", dialogClickListener).show();
     	}
     	
-    	
-    	// Asks if the user wants to remove the RSVP (Confirmation dialog)
-    	public void dialogConfirmRemoveRsvp(final View v) {
-    		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-			    @Override
-			    public void onClick(DialogInterface dialog, int which) {
-			        switch (which){
-			        case DialogInterface.BUTTON_POSITIVE:
-			        	removeRSVP(v);
-			            break;
-
-			        case DialogInterface.BUTTON_NEGATIVE:
-			        	return; // RSVP process cancelled
-			        }
-			    }
-			}; 
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-			builder.setMessage("Are you sure you'r not coming?").setPositiveButton("Yes :/", dialogClickListener)
-			    .setNegativeButton("Cancel", dialogClickListener).show();
-    	}
     	
     	// Initiates RSVP on thread. disables button. adds eventId to rsvpHistory
     	public void initiateRSVP(View v, String comments) {
