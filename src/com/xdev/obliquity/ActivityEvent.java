@@ -91,7 +91,7 @@ public class ActivityEvent extends TrackedActivity {
         			case 11: 
         				cacheSuccessful();
         				break;
-        			// Cache Failed would not propagate, Handled by Obliquity class
+        			// Cache Failed would not propogate, Handled by Obliquity class
         		}	
         	}
         };
@@ -137,7 +137,7 @@ public class ActivityEvent extends TrackedActivity {
 	
 	// Called by Obliquity(APP) on failed download
 	private void downloadFailed() {
-		makeToast("We encountered an error while trying to refresh.", Toast.LENGTH_SHORT);
+		makeToast("Network error. Could not refresh.", Toast.LENGTH_SHORT);
 		
 		refreshing = false;
 		if(list != null)
@@ -197,7 +197,7 @@ public class ActivityEvent extends TrackedActivity {
 	
 	
 	// -----------------------------------------------------------------------
-	// Initialise Adapter
+	// Initialize Adapter
 	private void setAdapter(List<Events> values) {
 		if(DEBUG) Log.i(TAG, "Setting up Adapter with count : " + values.size());
 		
@@ -317,7 +317,7 @@ public class ActivityEvent extends TrackedActivity {
         	if(DEBUG) Log.d(TAG, "Queue array : " + Arrays.toString(h));
     	}
     	
-    	// Swaps the data set
+    	// Swaps the dataset
     	public void changeDataSet(List<Events> values) {
     		this.values = values;
     		this.notifyDataSetChanged();
@@ -362,7 +362,7 @@ public class ActivityEvent extends TrackedActivity {
     			//DisplayImage(URL, ImageView, RequiredSize)
     			imgLoader.DisplayImage(thumbURL + values.get(groupPosition).eventId + ".jpg", holder.thumb, 100);
     		} else {
-    			// TODO : If noticed a lag, try with setting a tag with a boolean check to avoid reassigning every time. 
+    			// TODO : If noticed a lag, try with setting a tag with a boolean check to avoid reassigning everytime. 
     			holder.thumb.setImageResource(R.drawable.nothumb);
     		}
     		
@@ -398,10 +398,10 @@ public class ActivityEvent extends TrackedActivity {
 			holder.rsvp.setTag(R.string.key_eventid, event);
 			
     		if(contains(event)) {
-    			holder.rsvp.setText("Cancel");
+    			holder.rsvp.setText("Remove RSVP");
     			holder.rsvp.setTag(R.string.key_rsvp, true);
     		} else {
-    			holder.rsvp.setText("Attending");
+    			holder.rsvp.setText("Attend");
     			holder.rsvp.setTag(R.string.key_rsvp, false);
     		}
     		
@@ -453,7 +453,8 @@ public class ActivityEvent extends TrackedActivity {
     		if(DEBUG) Log.d(TAG, "RSVP Button rsvp : " + rsvp + "| event : " + event);
     		
     		if(rsvp) {
-    			removeRSVP(v);
+    			
+    			dialogConfirmRemoveRsvp(v);
     			
     		} else {
     			
@@ -509,7 +510,7 @@ public class ActivityEvent extends TrackedActivity {
 				   .setView(friendsView)
 				   .setTitle("RSVP")
 			       .setNegativeButton("No", dialogClickListener)
-			       .setPositiveButton("Let's Party!", dialogClickListener)
+			       .setPositiveButton("Yes", dialogClickListener)
 			       .show();
     	}
     	
@@ -535,10 +536,31 @@ public class ActivityEvent extends TrackedActivity {
     	}
     	
     	
+    	// Asks if the user wants to remove the RSVP (Confirmation dialog)
+    	public void dialogConfirmRemoveRsvp(final View v) {
+    		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			    @Override
+			    public void onClick(DialogInterface dialog, int which) {
+			        switch (which){
+			        case DialogInterface.BUTTON_POSITIVE:
+			        	removeRSVP(v);
+			            break;
+
+			        case DialogInterface.BUTTON_NEGATIVE:
+			        	return; // RSVP process cancelled
+			        }
+			    }
+			}; 
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+			builder.setMessage("Are you sure you're not attending?").setPositiveButton("Yes", dialogClickListener)
+			    .setNegativeButton("Cancel", dialogClickListener).show();
+    	}
+    	
     	// Initiates RSVP on thread. disables button. adds eventId to rsvpHistory
     	public void initiateRSVP(View v, String comments) {
     		Button btn = (Button)v;
-    		btn.setText("Cancel");
+    		btn.setText("Remove RSVP");
     		
     		int event = (Integer) v.getTag(R.string.key_eventid);
     		
@@ -555,7 +577,7 @@ public class ActivityEvent extends TrackedActivity {
     		tracker.trackEvent("Events", "RSVP", "Remove'd RSVP", 1);
     		
     		Button btn = (Button)v;
-    		btn.setText("Attending");
+    		btn.setText("Attend");
     		
     		int event = (Integer) v.getTag(R.string.key_eventid);
     		

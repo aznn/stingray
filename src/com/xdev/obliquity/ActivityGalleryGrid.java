@@ -71,10 +71,25 @@ public class ActivityGalleryGrid extends Activity{
         mImgLoader = superState.getImageLoader();
         
         ID = getIntent().getExtras().getString("ID");
+        String albumTitle = getIntent().getExtras().getString("title");
+        
+        TextView titleView = (TextView) findViewById(R.id.txtAlbumName);
+        // limit - number of characters to be displayed before ...
+        titleView.setText((shortenText(albumTitle, 19)));
         
         new LoadJSONTaskAlbum().execute();
 	}
 	
+	
+	// Shortens text to a character limit, after that limit ... added
+	private String shortenText(String text, int limit) {
+		if (text.length() <= limit)
+			return text;
+		
+		String newText = text.substring(0, limit);
+		newText = newText.concat("...");
+		return newText;
+	}
 	
 	private void jsonDownloaded(ReturnedDataGalleryGrid data) {
 		if(data == null) {

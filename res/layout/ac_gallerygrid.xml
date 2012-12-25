@@ -24,16 +24,38 @@
             android:text="Fetching the pictures.." />
         
     </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-    <GridView
-        android:id="@+id/gallerygrid_gridview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="auto_fit"
-        android:paddingTop="10dp"
-        android:columnWidth="100dp"
-        android:horizontalSpacing="2dp"
-        android:verticalSpacing="5dp"
-        android:stretchMode="spacingWidthUniform"/>
+        <TextView
+            android:id="@+id/txtAlbumName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:text="Album Name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/blue99"
+            android:textSize="30dp" />
+
+	   <GridView
+	       android:id="@+id/gallerygrid_gridview"
+	       android:layout_width="fill_parent"
+	       android:layout_height="fill_parent"
+	       android:layout_below="@+id/txtAlbumName"
+	       android:columnWidth="100dp"
+	       android:horizontalSpacing="2dp"
+	       android:numColumns="auto_fit"
+	       android:paddingTop="10dp"
+	       android:stretchMode="spacingWidthUniform"
+	       android:verticalSpacing="5dp" >
+
+	   </GridView>
+	   
+	   </RelativeLayout>
 
 </FrameLayout>

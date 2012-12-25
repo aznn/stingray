@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="23dp"
-        android:text="RSVP for friends?" />
+        android:text="Add friends to your Guest List?" />
     
     <EditText
         android:id="@+id/text_friends"

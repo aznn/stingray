@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="125dp"
-    android:layout_height="145dp"
+    android:layout_height="150dp"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
     
@@ -13,16 +13,15 @@
         android:scaleType="center"
         android:src="@drawable/nothumb" />
     
-    
 	<RelativeLayout
-        android:layout_width="125dp"
-        android:layout_height="15dp"
-        android:layout_gravity="bottom" >
+	    android:layout_width="125dp"
+	    android:layout_height="20dp"
+	    android:layout_gravity="bottom" >
 
     <TextView
         android:id="@+id/album_title"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_gravity="bottom"

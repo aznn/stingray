@@ -53,7 +53,10 @@ public class ActivityAlbumView extends Activity{
 	ImageLoader mImgLoader;
 	Context mContext;
 	
-	Hashtable<String, String> mData;
+	// <ConverPhotoId, index>
+	Hashtable<String, Integer> mData;
+	
+	ReturnedData mReturnedData;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -68,8 +71,10 @@ public class ActivityAlbumView extends Activity{
         mContext = this;
         
         // No Internet Access
-        if(!mUtil.isOnline())
+        if(!mUtil.isOnline()) {
         	displayError("Photos feature requires an internet connection.");
+        	return;
+        }
         
         // Loads JSON of the albums
         new LoadJSONTask().execute();
@@ -84,17 +89,21 @@ public class ActivityAlbumView extends Activity{
 		List<String> IDs = new ArrayList<String>();
 		List<String> titles = new ArrayList<String>();
 		
-		mData = new Hashtable<String, String>();
+		mData = new Hashtable<String, Integer>();
 		
+		int i = 0;
 		for(Data d:data.data) {
 			if(d.coverPhotoID == null || d.ID == null)
 				continue;
 			
 			IDs.add(d.coverPhotoID);
 			titles.add(d.title);
-			mData.put(d.coverPhotoID, d.ID);
+			mData.put(d.coverPhotoID, i);
+			
+			i++;
 		}
 		
+		mReturnedData = data;
 		initGridView(IDs, titles);
 	}
 	
@@ -117,8 +126,11 @@ public class ActivityAlbumView extends Activity{
 					long arg3) {
 				
 				String URL = (String) v.getTag();
+				int index = mData.get(URL);
+				
 				Intent mIntent = new Intent(mContext, ActivityGalleryGrid.class);
-				mIntent.putExtra("ID", mData.get(URL));
+				mIntent.putExtra("ID", mReturnedData.data.get(index).ID);
+				mIntent.putExtra("title", mReturnedData.data.get(index).title);
 				startActivity(mIntent);
 				
 			}

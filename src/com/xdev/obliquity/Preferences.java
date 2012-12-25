@@ -183,13 +183,13 @@ public class Preferences extends TrackedPreferenceActivity implements OnSharedPr
 	        String value = preferences.getString(key, "");
 	        
 			if(key.equals("SUMname") && containsDigit(value)) {
-				Toast.makeText(mContext, "You have a number in your name? Kudos. But we take only letters :)", Toast.LENGTH_LONG).show();
+				Toast.makeText(mContext, "Your name should contain only alphabets!", Toast.LENGTH_LONG).show();
 				ePref.setText("");
 				return;
 			}
 			
 			else if(key.equals("SUMmobile") && containsCharacter(value)) {
-				Toast.makeText(mContext, "Last time we checked, Mobile numbers on earth has only numbers.", Toast.LENGTH_LONG).show();
+				Toast.makeText(mContext, "Mobile number should contain only numbers!", Toast.LENGTH_LONG).show();
 				ePref.setText("");
 				return;
 			}

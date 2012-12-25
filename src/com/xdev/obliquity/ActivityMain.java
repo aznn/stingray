@@ -49,18 +49,22 @@ public class ActivityMain extends TrackedActivity implements OnClickListener{
         ImageView feed = (ImageView)findViewById(R.id.btn_feed);
         ImageView event = (ImageView)findViewById(R.id.btn_event);
         ImageView pref = (ImageView)findViewById(R.id.btn_preferences);
-        ImageView obliq = (ImageView)findViewById(R.id.btn_aboutObliquity);
+        ImageView photos = (ImageView)findViewById(R.id.btn_photos);
+        ImageView obliq = (ImageView)findViewById(R.id.btn_info);
         advert = (ImageView)findViewById(R.id.img_advert);
         
         feed.setOnClickListener(this);
         event.setOnClickListener(this);
         pref.setOnClickListener(this);
         obliq.setOnClickListener(this);
+        photos.setOnClickListener(this);
+        
         
         feed.setOnTouchListener(mOnTouchListener);
         event.setOnTouchListener(mOnTouchListener);
         pref.setOnTouchListener(mOnTouchListener);
         obliq.setOnTouchListener(mOnTouchListener);
+        photos.setOnTouchListener(mOnTouchListener);
  
         
         // Initiates the Util Class
@@ -174,10 +178,12 @@ public class ActivityMain extends TrackedActivity implements OnClickListener{
 				intent = new Intent(mContext, Preferences.class);
 				break;
 			
-			case R.id.btn_aboutObliquity:
-				//intent = new Intent(mContext, ActivityAboutObliquity.class);
-				//appState.clearFileCache();
+			case R.id.btn_photos:
 				intent = new Intent(mContext, ActivityAlbumView.class);
+				break;
+				
+			case R.id.btn_info:
+				intent = new Intent(mContext, ActivityAboutObliquity.class);
 				break;
 			
 		}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     
-    <PreferenceCategory android:title="Personal Details ( Required for RSVP )" android:key="c2dm" >
+    <PreferenceCategory android:title="Personal Details (REQUIRED)" android:key="c2dm" >
         
         <EditTextPreference 
             android:title="Name" 
